@@ -9,8 +9,8 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 class HeatMapDialog(QDialog):
     should_be_updated = pyqtSignal()
 
-    def __init__(self, plotter):
-        super(QDialog, self).__init__()
+    def __init__(self, plotter, parent=None):
+        QDialog.__init__(self, parent)
 
         self.my_plot = _PlotCanvas(self)
         self.show()

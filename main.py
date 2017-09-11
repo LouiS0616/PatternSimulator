@@ -1,23 +1,23 @@
 from heat_map import HeatMapDialog
+from AbstractPlotter import Plotter
 
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QApplication
 
 import sys
 import numpy as np
 
 
-class Plotter(QObject):
-    data_ready = pyqtSignal(object)
+class MyPlotter(Plotter):
+    def __init__(self, parent=None):
+        Plotter.__init__(self, parent)
 
-    @pyqtSlot()
-    def re_plot(self) -> None:
-        data = np.random.rand(12, 12)
-        self.data_ready.emit(data)
+    def make_data(self) -> np.ndarray:
+        return np.random.rand(12, 12)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    plotter = Plotter()
+    plotter = MyPlotter()
     win = HeatMapDialog(plotter)
     print('multi')
     sys.exit(app.exec_())
