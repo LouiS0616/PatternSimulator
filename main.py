@@ -12,7 +12,6 @@ class Plotter(QObject):
 
     @pyqtSlot()
     def re_plot(self) -> None:
-        # do some random task
         data = np.random.rand(12, 12)
         self.data_ready.emit(data)
 
