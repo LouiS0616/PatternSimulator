@@ -9,13 +9,15 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 class _PlotCanvas(FigureCanvas):
     clicked = pyqtSignal()
 
-    def __init__(self, parent: QObject=None):
+    def __init__(self, parent: HeatMapDialog):
         self._fig = Figure()
         self._axes = self._fig.add_subplot(1, 1, 1)
         self._heat_map = self._axes.pcolor([[]])
 
         FigureCanvas.__init__(self, self._fig)
         self.setParent(parent)
+
+        self.clicked.connect(parent.should_be_updated)
 
     @pyqtSlot(object)
     def plot(self, data) -> None:
@@ -27,6 +29,8 @@ class _PlotCanvas(FigureCanvas):
 
 
 class HeatMapDialog(QDialog):
+    should_be_updated = pyqtSignal()
+
     def __init__(self, plotter):
         super(QDialog, self).__init__()
 
@@ -36,11 +40,15 @@ class HeatMapDialog(QDialog):
         self.plotter = plotter
 
         # noinspection PyUnresolvedReferences
-        self.my_plot.clicked.connect(self.plotter.re_plot)
-        self.plotter.data_ready.connect(self.my_plot.plot)
+        self.should_be_updated.connect(
+            self.plotter.re_plot
+        )
+        self.plotter.data_ready.connect(
+            self.my_plot.plot
+        )
 
         self.thread = QThread()
         self.plotter.moveToThread(self.thread)
         self.thread.start()
 
-        self.my_plot.clicked.emit()
+        self.should_be_updated.emit()
