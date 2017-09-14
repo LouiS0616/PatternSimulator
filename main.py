@@ -1,5 +1,5 @@
 from heat_map import HeatMapDialog
-from AbstractPlotter import Plotter
+from abstract_plotter import Plotter
 
 from PyQt5.QtWidgets import QApplication
 

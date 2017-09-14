@@ -24,9 +24,6 @@ class FormulaModel(QObject):
     def coefficient_dict(self, arg_dict: dict) -> None:
         self._coefficient_dict = arg_dict
 
-    def has_time_axis(self) -> bool:
-        return 't' in self._coefficient_dict
-
     def get_substituted_formula_except_xy(self) -> sympy.add.Add:
         substitute_list = list(zip(
             map(symbols, self._coefficient_dict.keys()),
