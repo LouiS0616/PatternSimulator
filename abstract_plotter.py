@@ -15,3 +15,13 @@ class Plotter(QObject):
 
     def make_data(self) -> np.ndarray:
         pass
+
+
+class PlotterSample(Plotter):
+    def __init__(self, parent=None, grid: tuple=(12, 12)):
+        Plotter.__init__(self, parent)
+        self._grid = grid
+
+    def make_data(self):
+        return np.random.rand(*self._grid)
+

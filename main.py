@@ -1,23 +1,38 @@
 from heat_map import HeatMapDialog
-from abstract_plotter import Plotter
+from formula import FormulaModel
+
+from abstract_plotter import PlotterSample
+from formula_plotter import FormulaPlotter
 
 from PyQt5.QtWidgets import QApplication
 
 import sys
 import numpy as np
-
-
-class MyPlotter(Plotter):
-    def __init__(self, parent=None):
-        Plotter.__init__(self, parent)
-
-    def make_data(self) -> np.ndarray:
-        return np.random.rand(12, 12)
+import sympy as sp
+from sympy import symbols
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    plotter = MyPlotter()
+
+    x, y = symbols('x y')
+
+    """---- HERE TO REWRITE FORMULA ----"""
+    a, b, c = symbols('param1 param2 param3')
+    formula = a*sp.sin(x) + b*sp.tanh(y) + c
+    """---------------------------------"""
+
+    model = FormulaModel(formula)
+    plotter = FormulaPlotter(model)
+
+    """ HERE TO INITIALIZE COEFFICIENTS """
+    symbol_dict = model.coefficient_dict
+    symbol_dict['param1'] = 3
+    symbol_dict['param2'] = 3
+    symbol_dict['param3'] = 4
+    """---------------------------------"""
+
+    # plotter = PlotterSample()
     win = HeatMapDialog(plotter)
     print('multi')
     sys.exit(app.exec_())
