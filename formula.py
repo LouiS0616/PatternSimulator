@@ -16,13 +16,8 @@ class FormulaModel(QObject):
         self._coefficient_dict.pop('x', None)
         self._coefficient_dict.pop('y', None)
 
-    @property
-    def coefficient_dict(self) -> dict:
-        return self._coefficient_dict
-
-    @coefficient_dict.setter
-    def coefficient_dict(self, arg_dict: dict) -> None:
-        self._coefficient_dict = arg_dict
+    def set_a_coefficient_value(self, key: str, value: float) -> None:
+        self._coefficient_dict[key] = value
 
     def get_substituted_formula_except_xy(self) -> sympy.add.Add:
         substitute_list = list(zip(
@@ -30,3 +25,6 @@ class FormulaModel(QObject):
             self._coefficient_dict.values()
         ))
         return self._formula.subs(substitute_list)
+
+    def get_coefficient_list(self) -> list:
+        return list(self._coefficient_dict.keys())
