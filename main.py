@@ -1,13 +1,10 @@
 from heat_map import HeatMapDialog
 from formula import FormulaModel
 
-from abstract_plotter import PlotterSample
 from formula_plotter import FormulaPlotter
-
 from PyQt5.QtWidgets import QApplication
 
 import sys
-import numpy as np
 import sympy as sp
 from sympy import symbols
 
@@ -32,7 +29,6 @@ if __name__ == '__main__':
     symbol_dict['param3'] = 4
     """---------------------------------"""
 
-    # plotter = PlotterSample()
     win = HeatMapDialog(plotter)
     print('multi')
     sys.exit(app.exec_())
