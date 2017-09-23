@@ -1,3 +1,6 @@
 [submodule "MyPyUtil"]
 	path = MyPyUtil
 	url = https://github.com/LouiS0616/MyPyUtil
+[submodule "FloatSlider"]
+	path = FloatSlider
+	url = https://github.com/LouiS0616/FloatSlider
