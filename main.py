@@ -1,14 +1,13 @@
-from heat_map import HeatMapDialog
-from formula import FormulaModel
-from slider_dialog import SliderDialog
-
-from formula_plotter import FormulaPlotter
-from PyQt5.QtCore import pyqtSlot
-from PyQt5.QtWidgets import QApplication, QSlider
-
 import sys
+
 import sympy as sp
+from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QApplication
 from sympy import symbols
+
+from model.formula import FormulaModel
+from model.plotter.formula_plotter import FormulaPlotter
+from view.heat_map import HeatMapDialog
 
 
 @pyqtSlot(float)

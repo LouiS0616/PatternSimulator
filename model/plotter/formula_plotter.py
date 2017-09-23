@@ -1,7 +1,7 @@
-from abstract_plotter import Plotter
-from formula import FormulaModel
-
 import numpy as np
+
+from model.formula import FormulaModel
+from model.plotter.abstract_plotter import Plotter
 
 
 class FormulaPlotter(Plotter):
