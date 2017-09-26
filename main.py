@@ -38,7 +38,8 @@ class Main(QObject):
         """---------------------------------"""
 
         self._win = HeatMapDialog(self._plotter)
-        print('multi')
+        connect(self._win.canvas.clicked, self.make_name_to_save)
+        connect(self.save_name_decided, self._win.canvas.save_fig)
 
         self._slider_dialog = SliderDialog()
 
@@ -48,9 +49,14 @@ class Main(QObject):
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
         self._slider_dialog.show()
 
-        self._slider_dialog.get_items()
-
         sys.exit(app.exec_())
+
+    @pyqtSlot()
+    def make_name_to_save(self) -> None:
+        names = []
+        for name, value in self._slider_dialog.get_items():
+            names.append(name + '=' + str(value))
+        self.save_name_decided.emit(','.join(names))
 
     @pyqtSlot(str, float)
     def slot_item_changed(self, text: str, value: float):

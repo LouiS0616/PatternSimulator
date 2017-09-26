@@ -61,4 +61,4 @@ class _PlotCanvas(FigureCanvas):
         self.clicked.emit()
 
     def save_fig(self, name: str) -> None:
-        self._fig.savefig(name + '.png')
+        self._fig.savefig('result/' + name + '.png')

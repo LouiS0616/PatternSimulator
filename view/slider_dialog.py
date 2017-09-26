@@ -29,7 +29,7 @@ class SliderDialog(QDialog):
 
     def get_items(self):
         for label, slider in zip(self._labels, self._sliders):
-            pass
+            yield label.text(), slider.value()
 
     def _make_slider_changed(self, name: str):
         @pyqtSlot(float)
