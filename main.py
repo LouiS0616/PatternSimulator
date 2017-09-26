@@ -37,15 +37,15 @@ class Main(QObject):
         self._model.set_a_coefficient_value('param3', 4)
         """---------------------------------"""
 
+        # Heat Map Dialog
         self._win = HeatMapDialog(self._plotter)
         connect(self._win.canvas.clicked, self.make_name_to_save)
         connect(self.save_name_decided, self._win.canvas.save_fig)
 
+        # Sliders Dialog
         self._slider_dialog = SliderDialog()
-
         for param in self._model.get_coefficient_list():
             self._slider_dialog.add_row(param)
-
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
         self._slider_dialog.show()
 
