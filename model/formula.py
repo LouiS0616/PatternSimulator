@@ -30,4 +30,4 @@ class FormulaModel(QObject):
         return self._formula.subs(substitute_list)
 
     def get_coefficient_list(self) -> list:
-        return list(self._coefficient_dict.keys())
+        return sorted(list(self._coefficient_dict.keys()))
