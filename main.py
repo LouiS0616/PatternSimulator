@@ -25,7 +25,7 @@ class Main(QObject):
 
         """---- HERE TO REWRITE FORMULA ----"""
         a, b, c = symbols('kill survive param3')
-        self._formula = a*sp.sin(x) + b*sp.tanh(y) + c
+        self._formula = a*sp.sin(x) + b*sp.tanh(y) + (c**(1./2.))*x
         """---------------------------------"""
 
         self._model = FormulaModel(self._formula)
@@ -48,11 +48,12 @@ class Main(QObject):
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
         self._slider_dialog.show()
 
+        self._slider_dialog.get_items()
+
         sys.exit(app.exec_())
 
     @pyqtSlot(str, float)
     def slot_item_changed(self, text: str, value: float):
-        print(text, value)
         self._model.set_a_coefficient_value(text, value)
 
 if __name__ == '__main__':
