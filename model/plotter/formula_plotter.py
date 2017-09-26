@@ -27,4 +27,10 @@ class FormulaPlotter(Plotter):
             [formula_instance.subs([('x', x), ('y', y)]) for x in self._x_elements]
             for y in self._y_elements
         ]
-        return np.array(z_elements, dtype=np.float64)
+
+        try:
+            return np.array(z_elements, dtype=np.float64)
+        except TypeError:
+            message = 'Complex value or division-by-zero might occur.'
+            print(message)
+            raise TypeError(message)
