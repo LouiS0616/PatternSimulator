@@ -15,11 +15,14 @@ class SliderDialog(QDialog):
         self._labels = []
         self._sliders = []
 
-    def add_row(self, name: str) -> None:
+    def add_row(self, name: str, init_val: float=None) -> None:
         label = SliderDialog.MyLabel(name, self)
         self._labels.append(label)
 
         slider = FloatSliderWithEditor()
+        if init_val:
+            slider.set_value(init_val)
+
         slider_changed = self._make_slider_changed(name)
         self._sliders.append(slider)
         connect(slider.valueChanged, slider_changed)
