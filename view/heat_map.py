@@ -32,7 +32,6 @@ class HeatMapDialog(QDialog):
         self._thread.start()
 
         self.should_be_updated.emit()
-        self.show()
 
     @property
     def canvas(self) -> FigureCanvas:
@@ -63,7 +62,7 @@ class _PlotCanvas(FigureCanvas):
     def __init__(self, parent: HeatMapDialog):
         self._fig = Figure()
         self._axes = self._fig.add_subplot(1, 1, 1)
-        self._color_map = _PlotCanvas.make_color_map('yellow2black')
+        self._color_map = _PlotCanvas.make_color_map('yellow2black_via_white')
 
         FigureCanvas.__init__(self, self._fig)
         self.setParent(parent)

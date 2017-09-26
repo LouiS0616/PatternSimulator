@@ -41,6 +41,7 @@ class Main(QObject):
         self._win = HeatMapDialog(self._plotter)
         connect(self._win.canvas.clicked, self.make_name_to_save)
         connect(self.save_name_decided, self._win.canvas.save_fig)
+        self._win.show()
 
         # Sliders Dialog
         self._slider_dialog = SliderDialog()
