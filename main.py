@@ -45,8 +45,10 @@ class Main(QObject):
         # Sliders Dialog
         self._slider_dialog = SliderDialog()
         coefficient_dict = self._model.coefficient_dict
+
         for param in self._model.get_coefficient_list():
             self._slider_dialog.add_row(param, coefficient_dict[param])
+
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
         self._slider_dialog.show()
 

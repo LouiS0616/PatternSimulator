@@ -2,7 +2,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtGui import QMouseEvent
 
-from matplotlib import pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
@@ -42,19 +42,35 @@ class HeatMapDialog(QDialog):
 class _PlotCanvas(FigureCanvas):
     clicked = pyqtSignal()
 
-    # noinspection PyUnresolvedReferences
-    color_map = plt.cm.PuOr
+    @staticmethod
+    def make_color_map(name: str):
+        tmp_dict = {
+            'yellow2black': {
+                #        lowest            highest
+                'red':   ((0.0, 1.0, 1.0), (1.0, 0.0, 0.0)),
+                'green': ((0.0, 1.0, 1.0), (1.0, 0.0, 0.0)),
+                'blue':  ((0.0, 0.0, 0.0), (1.0, 0.0, 0.0))
+            },
+            'yellow2black_via_white': {
+                #        lowest            middle           highest
+                'red':   ((0.0, 1.0, 1.0), (0.5, 1.0, 1.0), (1.0, 0.0, 0.0)),
+                'green': ((0.0, 1.0, 1.0), (0.5, 1.0, 1.0), (1.0, 0.0, 0.0)),
+                'blue':  ((0.0, 0.0, 0.0), (0.5, 1.0, 1.0), (1.0, 0.0, 0.0))
+            }
+        }
+        return LinearSegmentedColormap(name, tmp_dict[name])
 
     def __init__(self, parent: HeatMapDialog):
         self._fig = Figure()
         self._axes = self._fig.add_subplot(1, 1, 1)
+        self._color_map = _PlotCanvas.make_color_map('yellow2black')
 
         FigureCanvas.__init__(self, self._fig)
         self.setParent(parent)
 
     @pyqtSlot(object)
     def plot(self, data) -> None:
-        self._axes.pcolor(data, cmap=self.color_map)
+        self._axes.pcolor(data, cmap=self._color_map)
         self.draw()
 
     def mousePressEvent(self, _: QMouseEvent) -> None:
