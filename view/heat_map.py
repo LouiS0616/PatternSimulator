@@ -2,6 +2,7 @@ from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtGui import QMouseEvent
 
+from matplotlib import pyplot as plt
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
@@ -47,7 +48,8 @@ class _PlotCanvas(FigureCanvas):
 
     @pyqtSlot(object)
     def plot(self, data) -> None:
-        self._axes.pcolor(data)
+        # noinspection PyUnresolvedReferences
+        self._axes.pcolor(data, cmap=plt.cm.PuOr)
         self.draw()
 
     def mousePressEvent(self, _: QMouseEvent) -> None:
