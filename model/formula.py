@@ -7,7 +7,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 class FormulaModel(QObject):
     formula_updated = pyqtSignal()
 
-    def __init__(self, formula: sympy.add.Add, parent: QObject=None):
+    def __init__(self, formula, parent: QObject=None):
         QObject.__init__(self, parent)
 
         self._formula = formula
