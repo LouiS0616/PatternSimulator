@@ -2,15 +2,14 @@ import sys
 
 import sympy as sp
 from PyQt5.QtCore import QObject, pyqtSlot
-from PyQt5.QtWidgets import QApplication, QDialog
+from PyQt5.QtWidgets import QApplication
 from sympy import symbols
 
 from model.formula import FormulaModel
 from model.plotter.formula_plotter import FormulaPlotter
 from view.heat_map import HeatMapDialog
 
-from FloatSlider.slider import FloatSliderWithEditor
-from MyPyUtil.my_util import connect
+from view.slider_dialog import SliderDialog
 
 
 class Main(QObject):
@@ -37,9 +36,10 @@ class Main(QObject):
         self._win = HeatMapDialog(self._plotter)
         print('multi')
 
-        slider = FloatSliderWithEditor()
-        connect(slider.valueChanged, self.slot_value_changed)
-        slider.show()
+        self._slider_dialog = SliderDialog()
+        for param in self._model.get_coefficient_list():
+            self._slider_dialog.add_row(param)
+        self._slider_dialog.show()
 
         sys.exit(app.exec_())
 
@@ -47,11 +47,6 @@ class Main(QObject):
     def slot_value_changed(self, value: float):
         print(value)
         self._model.set_a_coefficient_value('param1', value)
-
-
-class SliderDialog(QDialog):
-    def __init__(self):
-        QDialog.__init__(self, parent=None)
 
 
 if __name__ == '__main__':
