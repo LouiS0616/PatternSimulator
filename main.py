@@ -1,7 +1,7 @@
 import sys
 
 import sympy as sp
-from PyQt5.QtCore import QObject, pyqtSlot
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QApplication
 from sympy import symbols
 
@@ -15,6 +15,8 @@ from MyPyUtil.my_util.qt_util import connect
 
 
 class Main(QObject):
+    save_name_decided = pyqtSignal(str)
+
     def __init__(self):
         QObject.__init__(self, parent=None)
         app = QApplication(sys.argv)
@@ -39,8 +41,10 @@ class Main(QObject):
         print('multi')
 
         self._slider_dialog = SliderDialog()
+
         for param in self._model.get_coefficient_list():
             self._slider_dialog.add_row(param)
+
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
         self._slider_dialog.show()
 
@@ -49,7 +53,6 @@ class Main(QObject):
     @pyqtSlot(str, float)
     def slot_item_changed(self, text: str, value: float):
         self._model.set_a_coefficient_value(text, value)
-
 
 if __name__ == '__main__':
     main = Main()

@@ -1,5 +1,5 @@
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
-from PyQt5.QtWidgets import QDialog, QLabel, QFormLayout, QWidget
+from PyQt5.QtWidgets import QDialog, QLabel, QFormLayout
 from PyQt5.QtGui import QFont
 
 from FloatSlider.slider import FloatSliderWithEditor
