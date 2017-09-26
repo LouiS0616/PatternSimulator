@@ -1,10 +1,12 @@
 import sympy
 from sympy import symbols
 
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QObject, pyqtSignal
 
 
 class FormulaModel(QObject):
+    formula_updated = pyqtSignal()
+
     def __init__(self, formula: sympy.add.Add, parent: QObject=None):
         QObject.__init__(self, parent)
 
@@ -18,6 +20,7 @@ class FormulaModel(QObject):
 
     def set_a_coefficient_value(self, key: str, value: float) -> None:
         self._coefficient_dict[key] = value
+        self.formula_updated.emit()
 
     def get_substituted_formula_except_xy(self) -> sympy.add.Add:
         substitute_list = list(zip(

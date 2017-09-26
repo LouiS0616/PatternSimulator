@@ -3,6 +3,8 @@ import numpy as np
 from model.formula import FormulaModel
 from model.plotter.abstract_plotter import Plotter
 
+from MyPyUtil.my_util import connect
+
 
 class FormulaPlotter(Plotter):
     def __init__(self, model: FormulaModel, parent=None,
@@ -14,6 +16,8 @@ class FormulaPlotter(Plotter):
 
         self._x_elements = np.linspace(*x_range, particle_num)
         self._y_elements = np.linspace(*y_range, particle_num)
+
+        connect(model.formula_updated, self.re_plot)
 
     def make_data(self) -> np.ndarray:
         formula_instance = \
