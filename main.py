@@ -52,6 +52,7 @@ class Main(QObject):
 
     @pyqtSlot(str, float)
     def slot_item_changed(self, text: str, value: float):
+        print(text, value)
         self._model.set_a_coefficient_value(text, value)
 
 if __name__ == '__main__':
