@@ -15,7 +15,7 @@ class HeatMapDialog(QDialog):
     def __init__(self, plotter, parent=None):
         QDialog.__init__(self, parent)
 
-        self._canvas = _PlotCanvas(self)
+        self._canvas = PlotCanvas(self)
         self._plotter = plotter
 
         connect(
@@ -38,7 +38,7 @@ class HeatMapDialog(QDialog):
         return self._canvas
 
 
-class _PlotCanvas(FigureCanvas):
+class PlotCanvas(FigureCanvas):
     clicked = pyqtSignal()
 
     @staticmethod
@@ -59,10 +59,10 @@ class _PlotCanvas(FigureCanvas):
         }
         return LinearSegmentedColormap(name, tmp_dict[name])
 
-    def __init__(self, parent: HeatMapDialog):
+    def __init__(self, parent: HeatMapDialog=None):
         self._fig = Figure()
         self._axes = self._fig.add_subplot(1, 1, 1)
-        self._color_map = _PlotCanvas.make_color_map('yellow2black_via_white')
+        self._color_map = PlotCanvas.make_color_map('yellow2black')
 
         FigureCanvas.__init__(self, self._fig)
         self.setParent(parent)

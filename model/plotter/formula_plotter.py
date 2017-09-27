@@ -9,7 +9,7 @@ from MyPyUtil.my_util import connect
 class FormulaPlotter(Plotter):
     def __init__(self, model: FormulaModel, parent=None,
                  x_range: tuple=(-5., 5.), y_range: tuple=(-5., 5),
-                 particle_num: int=64):
+                 particle_num: int=64, auto_update: bool=True):
 
         Plotter.__init__(self, parent)
         self._model = model
@@ -17,7 +17,8 @@ class FormulaPlotter(Plotter):
         self._x_elements = np.linspace(*x_range, particle_num)
         self._y_elements = np.linspace(*y_range, particle_num)
 
-        connect(model.formula_updated, self.re_plot)
+        if auto_update:
+            connect(model.formula_updated, self.re_plot)
 
     def make_data(self) -> np.ndarray:
         formula_instance = \

@@ -7,7 +7,7 @@ from sympy import symbols
 
 from model.formula import FormulaModel
 from model.plotter.formula_plotter import FormulaPlotter
-from view.heat_map import HeatMapDialog
+from view.heat_map import HeatMapDialog, PlotCanvas
 
 from view.slider_dialog import SliderDialog
 from FloatSlider.slider.float_slider_with_editor import FloatSliderWithEditor
@@ -41,7 +41,7 @@ class Main(QObject):
         # Heat Map Dialog
         self._win = HeatMapDialog(self._plotter)
         connect(self._win.canvas.clicked, self.make_name_to_save)
-        connect(self.save_name_decided, self._win.canvas.save_fig)
+        connect(self.save_name_decided, self._make_save_delicately(particle_num=128))
         self._win.show()
 
         # Sliders Dialog
@@ -65,6 +65,18 @@ class Main(QObject):
         for name, value in self._slider_dialog.get_items():
             names.append(name + '=' + str(value))
         self.save_name_decided.emit(','.join(names))
+
+    def _make_save_delicately(self, particle_num: int):
+        _delicate_plotter = FormulaPlotter(self._model, particle_num=particle_num, auto_update=False)
+        _delicate_figure = PlotCanvas()
+
+        @pyqtSlot(str)
+        def save_delicately(name: str) -> None:
+            _delicate_plotter.re_plot()
+            _delicate_figure.plot(_delicate_plotter.make_data())
+            _delicate_figure.save_fig(name)
+
+        return save_delicately
 
     @pyqtSlot(str, float)
     def slot_item_changed(self, text: str, value: float):
