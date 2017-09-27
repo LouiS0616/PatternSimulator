@@ -32,6 +32,7 @@ class Main(QObject):
 
         self._model = FormulaModel(self._formula)
         self._plotter = FormulaPlotter(self._model, particle_num=32)
+        connect(self._plotter.error_occurred, self.output_error_log)
 
         """ HERE TO INITIALIZE COEFFICIENTS """
         self._model.set_a_coefficient_value('kill', 3)
@@ -64,10 +65,23 @@ class Main(QObject):
 
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
 
-        self._win.show()
         self._slider_dialog.show()
+        self._win.show()
 
         sys.exit(self.app.exec_())
+
+    @pyqtSlot(str)
+    def output_error_log(self, message) -> None:
+        with open('result/error_log.txt', 'a') as f:
+            def write(arg):
+                f.write(arg + '\n')
+
+            write(message)
+            write(str(self._model))
+            write(str(self._model.coefficient_dict))
+            write('-' * 64 + '\n')
+
+        exit(1)
 
     @pyqtSlot()
     def make_name_to_save(self) -> None:

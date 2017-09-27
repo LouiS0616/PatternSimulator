@@ -32,6 +32,9 @@ class FormulaModel(QObject):
     def get_coefficient_list(self) -> list:
         return sorted(list(self._coefficient_dict.keys()))
 
+    def __str__(self) -> str:
+        return str(self._formula)
+
     @property
     def coefficient_dict(self) -> dict:
         return self._coefficient_dict

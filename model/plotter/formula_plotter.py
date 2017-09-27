@@ -5,8 +5,12 @@ from model.plotter.abstract_plotter import Plotter
 
 from MyPyUtil.my_util import connect
 
+from PyQt5.QtCore import pyqtSignal
+
 
 class FormulaPlotter(Plotter):
+    error_occurred = pyqtSignal(str)
+
     def __init__(self, model: FormulaModel, parent=None,
                  x_range: tuple=(-5., 5.), y_range: tuple=(-5., 5),
                  particle_num: int=64, auto_update: bool=True):
@@ -32,6 +36,4 @@ class FormulaPlotter(Plotter):
         try:
             return np.array(z_elements, dtype=np.float64)
         except TypeError:
-            message = 'Complex value or division-by-zero might occur.'
-            print(message)
-            raise TypeError(message)
+            self.error_occurred.emit('Complex value or division-by-zero might occur.')
