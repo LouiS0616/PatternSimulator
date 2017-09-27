@@ -1,13 +1,14 @@
 import sys
 
 import sympy as sp
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
 from PyQt5.QtWidgets import QApplication
 from sympy import symbols
 
 from model.formula import FormulaModel
 from model.plotter.formula_plotter import FormulaPlotter
-from view.heat_map import HeatMapDialog, PlotCanvas
+from view.heat_map import HeatMapDialog
+from plot_saver import PlotSaver
 
 from view.slider_dialog import SliderDialog
 from FloatSlider.slider.float_slider_with_editor import FloatSliderWithEditor
@@ -20,7 +21,7 @@ class Main(QObject):
 
     def __init__(self):
         QObject.__init__(self, parent=None)
-        app = QApplication(sys.argv)
+        self.app = QApplication(sys.argv)
 
         x, y = symbols('x y')
 
@@ -41,8 +42,14 @@ class Main(QObject):
         # Heat Map Dialog
         self._win = HeatMapDialog(self._plotter)
         connect(self._win.canvas.clicked, self.make_name_to_save)
-        connect(self.save_name_decided, self._make_save_delicately(particle_num=128))
-        self._win.show()
+        connect(self._win.finished, self._quit)
+
+        # Plot Saver
+        self._plot_saver = PlotSaver(self._model)
+        self._save_thread = QThread()
+        self._plot_saver.moveToThread(self._save_thread)
+        self._save_thread.start()
+        connect(self.save_name_decided, self._plot_saver.save_fig)
 
         # Sliders Dialog
         self._slider_dialog = SliderDialog()
@@ -55,9 +62,11 @@ class Main(QObject):
             self._slider_dialog.add_row(name=param, slider_with_editor=slider_with_editor)
 
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
+
+        self._win.show()
         self._slider_dialog.show()
 
-        sys.exit(app.exec_())
+        sys.exit(self.app.exec_())
 
     @pyqtSlot()
     def make_name_to_save(self) -> None:
@@ -66,21 +75,13 @@ class Main(QObject):
             names.append(name + '=' + str(value))
         self.save_name_decided.emit(','.join(names))
 
-    def _make_save_delicately(self, particle_num: int):
-        _delicate_plotter = FormulaPlotter(self._model, particle_num=particle_num, auto_update=False)
-        _delicate_figure = PlotCanvas()
-
-        @pyqtSlot(str)
-        def save_delicately(name: str) -> None:
-            _delicate_plotter.re_plot()
-            _delicate_figure.plot(_delicate_plotter.make_data())
-            _delicate_figure.save_fig(name)
-
-        return save_delicately
-
     @pyqtSlot(str, float)
     def slot_item_changed(self, text: str, value: float):
         self._model.set_a_coefficient_value(text, value)
+
+    @pyqtSlot(int)
+    def _quit(self, _):
+        exit(0)
 
 if __name__ == '__main__':
     main = Main()
