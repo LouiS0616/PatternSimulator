@@ -11,6 +11,8 @@ class SliderDialog(QDialog):
 
     def __init__(self):
         QDialog.__init__(self, parent=None)
+        self.setWindowFlags(Qt.WindowTitleHint)
+        self.setWindowTitle('Param Slider Dialog')
         self._layout = QFormLayout()
         self._labels = []
         self._sliders = []
