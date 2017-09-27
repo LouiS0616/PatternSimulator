@@ -1,8 +1,8 @@
 import sys
 
 import sympy as sp
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread, QPoint
+from PyQt5.QtWidgets import QApplication, QWidget
 from sympy import symbols
 
 from model.formula import FormulaModel
@@ -65,6 +65,11 @@ class Main(QObject):
 
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
 
+        self._win.move(160, 124)
+        self._slider_dialog.move(
+            self._win.pos().x() + self._win.size().width() + 10,
+            self._win.pos().y() + self._win.size().height() - self._slider_dialog.sizeHint().height()
+        )
         self._slider_dialog.show()
         self._win.show()
 
