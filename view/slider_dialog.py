@@ -19,20 +19,20 @@ class SliderDialog(QDialog):
         label = SliderDialog.MyLabel(name, self)
         self._labels.append(label)
 
-        slider = FloatSliderWithEditor()
+        slider_with_editor = FloatSliderWithEditor()
         if init_val:
-            slider.set_value(init_val)
+            slider_with_editor.slider.set_value(init_val)
 
         slider_changed = self._make_slider_changed(name)
-        self._sliders.append(slider)
-        connect(slider.valueChanged, slider_changed)
+        self._sliders.append(slider_with_editor)
+        connect(slider_with_editor.valueChanged, slider_changed)
 
-        self._layout.addRow(label, slider)
+        self._layout.addRow(label, slider_with_editor)
         self.setLayout(self._layout)
 
     def get_items(self):
-        for label, slider in zip(self._labels, self._sliders):
-            yield label.text(), slider.value()
+        for label, slider_with_editor in zip(self._labels, self._sliders):
+            yield label.text(), slider_with_editor.slider.value()
 
     def _make_slider_changed(self, name: str):
         @pyqtSlot(float)
