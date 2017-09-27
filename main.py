@@ -10,6 +10,7 @@ from model.plotter.formula_plotter import FormulaPlotter
 from view.heat_map import HeatMapDialog
 
 from view.slider_dialog import SliderDialog
+from FloatSlider.slider.float_slider_with_editor import FloatSliderWithEditor
 
 from MyPyUtil.my_util.qt_util import connect
 
@@ -48,7 +49,10 @@ class Main(QObject):
         coefficient_dict = self._model.coefficient_dict
 
         for param in self._model.get_coefficient_list():
-            self._slider_dialog.add_row(param, coefficient_dict[param])
+            slider_with_editor = FloatSliderWithEditor()
+            slider_with_editor.slider.set_value(coefficient_dict[param])
+            slider_with_editor.slider.set_range(-20., 20.)
+            self._slider_dialog.add_row(name=param, slider_with_editor=slider_with_editor)
 
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
         self._slider_dialog.show()

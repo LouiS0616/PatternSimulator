@@ -77,3 +77,4 @@ class _PlotCanvas(FigureCanvas):
 
     def save_fig(self, name: str) -> None:
         self._fig.savefig('result/' + name + '.png')
+        print('Saved ' + name, end='.\n')
