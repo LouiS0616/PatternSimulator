@@ -41,7 +41,7 @@ class Main(QObject):
 
         # Heat Map Dialog
         self._win = HeatMapDialog(self._plotter)
-        self._win.setWindowTitle('Pattern Simulator (C) Loui Sakaki')
+        self._win.setWindowTitle('Pattern Simulator (C) Loui Sakaki 2017')
         connect(self._win.canvas.clicked, self.make_name_to_save)
         connect(self._win.finished, self._quit)
 
