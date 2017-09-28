@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 
 import sympy as sp
 from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
@@ -61,11 +62,12 @@ class Main(QObject):
             slider_with_editor = FloatSliderWithEditor()
             slider_with_editor.slider.set_initial_value(coefficient_dict[param])
             slider_with_editor.slider.set_value(coefficient_dict[param])
-            # slider_with_editor.slider.set_range(-20., 20.)
+            slider_with_editor.slider.set_range(-20., 20.)
             self._slider_dialog.add_row(name=param, slider_with_editor=slider_with_editor)
 
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
 
+        # Adjust window position
         self._win.move(160, 124)
         self._slider_dialog.move(
             self._win.pos().x() + self._win.size().width() + 10,
@@ -81,11 +83,13 @@ class Main(QObject):
         with open('result/error_log.txt', 'a') as f:
             def write(arg):
                 f.write(arg + '\n')
+                print(arg)
 
+            f.write('-' * 64 + '\n')
+            f.write(str(datetime.today()) + '\n')
             write(message)
             write(str(self._model))
             write(str(self._model.coefficient_dict))
-            write('-' * 64 + '\n')
 
         exit(1)
 
