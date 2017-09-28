@@ -24,9 +24,11 @@ class SliderDialog(QDialog):
         if slider_with_editor is None:
             slider_with_editor = FloatSliderWithEditor()
 
-        slider_changed = self._make_slider_changed(name)
         self._sliders.append(slider_with_editor)
-        connect(slider_with_editor.valueChanged, slider_changed)
+        connect(
+            slider_with_editor.valueChanged,
+            self._make_slider_changed(name)
+        )
 
         self._layout.addRow(label, slider_with_editor)
         self.setLayout(self._layout)

@@ -1,8 +1,8 @@
 import sys
 
 import sympy as sp
-from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread, QPoint
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
+from PyQt5.QtWidgets import QApplication
 from sympy import symbols
 
 from model.formula import FormulaModel
@@ -59,8 +59,9 @@ class Main(QObject):
 
         for param in self._model.get_coefficient_list():
             slider_with_editor = FloatSliderWithEditor()
+            slider_with_editor.slider.set_initial_value(coefficient_dict[param])
             slider_with_editor.slider.set_value(coefficient_dict[param])
-            slider_with_editor.slider.set_range(-20., 20.)
+            # slider_with_editor.slider.set_range(-20., 20.)
             self._slider_dialog.add_row(name=param, slider_with_editor=slider_with_editor)
 
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
