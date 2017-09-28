@@ -69,7 +69,7 @@ class PlotCanvas(FigureCanvas):
 
     @pyqtSlot(object)
     def plot(self, data) -> None:
-        self._axes.pcolor(data, cmap=self._color_map)
+        self._axes.pcolormesh(data, cmap=self._color_map)
         self.draw()
 
     def mousePressEvent(self, _: QMouseEvent) -> None:
