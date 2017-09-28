@@ -66,6 +66,7 @@ class Main(QObject):
             self._slider_dialog.add_row(name=param, slider_with_editor=slider_with_editor)
 
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
+        connect(self._slider_dialog.request_for_save, self.make_name_to_save)
 
         # Adjust window position
         self._win.move(160, 124)

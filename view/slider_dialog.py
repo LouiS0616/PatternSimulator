@@ -8,6 +8,7 @@ from MyPyUtil.my_util.qt_util import connect
 
 class SliderDialog(QDialog):
     item_changed = pyqtSignal(str, float)
+    request_for_save = pyqtSignal()
 
     def __init__(self):
         QDialog.__init__(self, parent=None)
@@ -29,6 +30,10 @@ class SliderDialog(QDialog):
             slider_with_editor.valueChanged,
             self._make_slider_changed(name)
         )
+        connect(
+            slider_with_editor.functionKeyPressed,
+            self._function_key_pressed
+        )
 
         self._layout.addRow(label, slider_with_editor)
         self.setLayout(self._layout)
@@ -36,6 +41,10 @@ class SliderDialog(QDialog):
     def get_items(self):
         for label, slider_with_editor in zip(self._labels, self._sliders):
             yield label.text(), slider_with_editor.slider.value()
+
+    def _function_key_pressed(self, f_number: int) -> None:
+        if f_number == 6:
+            self.request_for_save.emit()
 
     def _make_slider_changed(self, name: str):
         @pyqtSlot(float)
