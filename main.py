@@ -106,6 +106,7 @@ class Main(QObject):
         for text, value in self._slider_dialog.get_items():
             self._model.set_a_coefficient_value(text, value)
         self._model.blockSignals(False)
+        self._plotter.re_plot()
 
     @pyqtSlot()
     def make_name_to_save(self) -> None:
