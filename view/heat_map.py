@@ -34,6 +34,10 @@ class HeatMapDialog(QDialog):
         self.should_be_updated.emit()
 
     @property
+    def thread(self) -> QThread:
+        return self._thread
+
+    @property
     def canvas(self) -> FigureCanvas:
         return self._canvas
 

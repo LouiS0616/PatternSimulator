@@ -108,6 +108,7 @@ class Main(QObject):
     @pyqtSlot(int)
     def _quit(self, _):
         self._save_thread.quit()
+        self._win.thread.quit()
         self.app.quit()
 
 if __name__ == '__main__':
