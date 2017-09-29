@@ -68,6 +68,8 @@ class Main(QObject):
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
         connect(self._slider_dialog.request_for_save, self.make_name_to_save)
 
+        connect(self._plotter.success_to_compute, self._slider_dialog.save_values)
+
         # Adjust window position
         self._win.move(160, 124)
         self._slider_dialog.move(
@@ -82,7 +84,7 @@ class Main(QObject):
     @pyqtSlot(str)
     def output_error_log(self, message) -> None:
         with open('result/error_log.txt', 'a') as f:
-            def write(arg):
+            def write(arg=''):
                 f.write(arg + '\n')
                 print(arg)
 
@@ -91,8 +93,9 @@ class Main(QObject):
             write(message)
             write(str(self._model))
             write(str(self._model.coefficient_dict))
+            write()
 
-        exit(1)
+        self._slider_dialog.load_values()
 
     @pyqtSlot()
     def make_name_to_save(self) -> None:

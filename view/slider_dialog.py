@@ -20,6 +20,8 @@ class SliderDialog(QDialog):
         self._labels = []
         self._sliders = []
 
+        self._prev_values = {}
+
     def add_row(self, name: str, slider_with_editor: FloatSliderWithEditor=None) -> None:
         label = SliderDialog.MyLabel(name, self)
         self._labels.append(label)
@@ -43,6 +45,18 @@ class SliderDialog(QDialog):
     def get_items(self):
         for label, slider_with_editor in zip(self._labels, self._sliders):
             yield label.text(), slider_with_editor.slider.value()
+
+    @pyqtSlot()
+    def save_values(self) -> None:
+        for label, slider in zip(self._labels, self._sliders):
+            self._prev_values[label.text()] = slider.slider.value()
+
+    @pyqtSlot()
+    def load_values(self) -> None:
+        self.blockSignals(True)
+        for label, slider in zip(self._labels, self._sliders):
+            slider.slider.set_value(self._prev_values[label.text()])
+        self.blockSignals(False)
 
     def _function_key_pressed(self, f_number: int) -> None:
         if f_number == 6:

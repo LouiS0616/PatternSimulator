@@ -9,6 +9,7 @@ from PyQt5.QtCore import pyqtSignal
 
 
 class FormulaPlotter(Plotter):
+    success_to_compute = pyqtSignal()
     error_occurred = pyqtSignal(str)
 
     def __init__(self, model: FormulaModel, parent=None,
@@ -20,6 +21,7 @@ class FormulaPlotter(Plotter):
 
         self._x_elements = np.linspace(*x_range, particle_num)
         self._y_elements = np.linspace(*y_range, particle_num)
+        self._previous_z_elements = None
 
         if auto_update:
             connect(model.formula_updated, self.re_plot)
@@ -34,6 +36,17 @@ class FormulaPlotter(Plotter):
         ]
 
         try:
-            return np.array(z_elements, dtype=np.float64)
+            ret = np.array(z_elements, dtype=np.float64)
         except TypeError:
-            self.error_occurred.emit('Complex value or division-by-zero might occur.')
+            self._report_result(False, 'Complex value or division-by-zero might occur.')
+            return self._previous_z_elements
+
+        self._previous_z_elements = ret
+        self._report_result(True)
+        return ret
+
+    def _report_result(self, result: bool, text: str=''):
+        if result:
+            self.success_to_compute.emit()
+        else:
+            self.error_occurred.emit(text)
