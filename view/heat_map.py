@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QThread
 from PyQt5.QtWidgets import QDialog
-from PyQt5.QtGui import QMouseEvent
+from PyQt5.QtGui import QMouseEvent, QIcon
 
 from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.figure import Figure
@@ -15,6 +15,7 @@ class HeatMapDialog(QDialog):
     def __init__(self, plotter, parent=None):
         QDialog.__init__(self, parent)
         self.setWindowFlags(Qt.WindowCloseButtonHint)
+        self.setWindowIcon(QIcon('./resource/icon64x64.png'))
 
         self._canvas = PlotCanvas(self)
         self._plotter = plotter

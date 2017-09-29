@@ -1,6 +1,6 @@
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QDialog, QLabel, QFormLayout, QWidget
-from PyQt5.QtGui import QFont
+from PyQt5.QtGui import QFont, QIcon
 
 from FloatSlider.slider import FloatSliderWithEditor
 from MyPyUtil.my_util.qt_util import connect
@@ -14,6 +14,8 @@ class SliderDialog(QDialog):
         QDialog.__init__(self, parent=None)
         self.setWindowFlags(Qt.WindowTitleHint)
         self.setWindowTitle('Param Slider Dialog')
+        self.setWindowIcon(QIcon('./resource/icon64x64.png'))
+
         self._layout = QFormLayout()
         self._labels = []
         self._sliders = []
