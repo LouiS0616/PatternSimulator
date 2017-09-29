@@ -45,7 +45,7 @@ class Main(QObject):
         self._win = HeatMapDialog(self._plotter)
         self._win.setWindowTitle('Pattern Simulator (C) Loui Sakaki 2017')
         connect(self._win.canvas.clicked, self.make_name_to_save)
-        connect(self._win.finished, self._quit)
+        connect(self._win.finished, self._exit)
 
         # Plot Saver
         self._plot_saver = PlotSaver(self._model)
@@ -65,10 +65,13 @@ class Main(QObject):
             slider_with_editor.slider.set_range(-20., 20.)
             self._slider_dialog.add_row(name=param, slider_with_editor=slider_with_editor)
 
+        self._slider_dialog.save_values()
+
         connect(self._slider_dialog.item_changed, self.slot_item_changed)
         connect(self._slider_dialog.request_for_save, self.make_name_to_save)
 
         connect(self._plotter.success_to_compute, self._slider_dialog.save_values)
+        connect(self._plotter.request_for_exit, self._exit)
 
         # Adjust window position
         self._win.move(160, 124)
@@ -96,6 +99,13 @@ class Main(QObject):
             write()
 
         self._slider_dialog.load_values()
+        self.reload_formula_model()
+
+    def reload_formula_model(self) -> None:
+        self._model.blockSignals(True)
+        for text, value in self._slider_dialog.get_items():
+            self._model.set_a_coefficient_value(text, value)
+        self._model.blockSignals(False)
 
     @pyqtSlot()
     def make_name_to_save(self) -> None:
@@ -109,10 +119,10 @@ class Main(QObject):
         self._model.set_a_coefficient_value(text, value)
 
     @pyqtSlot(int)
-    def _quit(self, _):
+    def _exit(self, return_code):
         self._save_thread.quit()
         self._win.thread.quit()
-        self.app.quit()
+        self.app.exit(return_code)
 
 if __name__ == '__main__':
     main = Main()

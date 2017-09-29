@@ -12,6 +12,8 @@ class FormulaPlotter(Plotter):
     success_to_compute = pyqtSignal()
     error_occurred = pyqtSignal(str)
 
+    request_for_exit = pyqtSignal(int)
+
     def __init__(self, model: FormulaModel, parent=None,
                  x_range: tuple=(-5., 5.), y_range: tuple=(-5., 5),
                  particle_num: int=64, auto_update: bool=True):
@@ -22,6 +24,8 @@ class FormulaPlotter(Plotter):
         self._x_elements = np.linspace(*x_range, particle_num)
         self._y_elements = np.linspace(*y_range, particle_num)
         self._previous_z_elements = None
+
+        self._num_of_error_occurrence_in_serial = 0
 
         if auto_update:
             connect(model.formula_updated, self.re_plot)
@@ -47,6 +51,13 @@ class FormulaPlotter(Plotter):
 
     def _report_result(self, result: bool, text: str=''):
         if result:
+            self._num_of_error_occurrence_in_serial = 0
             self.success_to_compute.emit()
         else:
+            self._num_of_error_occurrence_in_serial += 1
+
+            if self._num_of_error_occurrence_in_serial >= 4:
+                self.request_for_exit.emit(1)
+                return
+
             self.error_occurred.emit(text)
