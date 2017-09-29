@@ -1,7 +1,7 @@
 import sympy
 from sympy import symbols
 
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.QtCore import QObject, pyqtSignal, pyqtSlot
 
 
 class FormulaModel(QObject):
@@ -18,6 +18,7 @@ class FormulaModel(QObject):
         self._coefficient_dict.pop('x', None)
         self._coefficient_dict.pop('y', None)
 
+    @pyqtSlot(str, float)
     def set_a_coefficient_value(self, key: str, value: float) -> None:
         self._coefficient_dict[key] = value
         self.formula_updated.emit()

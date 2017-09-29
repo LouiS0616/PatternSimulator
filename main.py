@@ -67,7 +67,7 @@ class Main(QObject):
 
         self._slider_dialog.save_values()
 
-        connect(self._slider_dialog.item_changed, self.slot_item_changed)
+        connect(self._slider_dialog.item_changed, self._model.set_a_coefficient_value)
         connect(self._slider_dialog.request_for_save, self.make_name_to_save)
 
         connect(self._plotter.success_to_compute, self._slider_dialog.save_values)
@@ -114,10 +114,6 @@ class Main(QObject):
         for name, value in self._slider_dialog.get_items():
             names.append(name + '=' + str(value))
         self.save_name_decided.emit(','.join(names))
-
-    @pyqtSlot(str, float)
-    def slot_item_changed(self, text: str, value: float):
-        self._model.set_a_coefficient_value(text, value)
 
     @pyqtSlot(int)
     def _exit(self, return_code):
