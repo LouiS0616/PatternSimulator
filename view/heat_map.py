@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtSignal, pyqtSlot, QThread
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QThread
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtGui import QMouseEvent
 
@@ -14,6 +14,7 @@ class HeatMapDialog(QDialog):
 
     def __init__(self, plotter, parent=None):
         QDialog.__init__(self, parent)
+        self.setWindowFlags(Qt.WindowCloseButtonHint)
 
         self._canvas = PlotCanvas(self)
         self._plotter = plotter
